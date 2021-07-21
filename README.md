@@ -1,4 +1,4 @@
 # Relativity-Unity
 
-![lorentzMatrix](img\lorentzMatrix.PNG)
+![lorentzMatrix](img/lorentzMatrix.PNG)
 
