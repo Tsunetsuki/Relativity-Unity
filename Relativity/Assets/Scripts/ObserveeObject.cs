@@ -15,7 +15,7 @@ public class ObserveeObject : MonoBehaviour
     void Start() {
         observer = GameObject.FindGameObjectWithTag("Observer").GetComponent<Observer>();
         startingPoint = transform.position;
-        spatial_velocity = new Vector2(0.3f, 0.3f) * Observer.LIGHT_SPEED;
+        spatial_velocity = new Vector2(0.6f, 0.6f) * Observer.LIGHT_SPEED;
         stVelocity = new Vector3(spatial_velocity.x, 1, spatial_velocity.y);
         
         if (!IsCopy)
