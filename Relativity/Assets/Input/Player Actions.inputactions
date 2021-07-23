@@ -9,7 +9,7 @@
                     "name": "Movement",
                     "type": "Value",
                     "id": "447484cd-ccfe-4ea7-8add-8b3b81a98644",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Stick",
                     "processors": "",
                     "interactions": ""
                 },
@@ -17,7 +17,15 @@
                     "name": "BoostChange",
                     "type": "Value",
                     "id": "14b02495-c385-4f12-a5fd-79fd709004c7",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Stick",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "BoostFreeze",
+                    "type": "Button",
+                    "id": "89c0ce96-facc-4e5a-b8f5-dc6edd1aa2a8",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -152,6 +160,28 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "BoostChange",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ea5a43b3-bf1e-4a7b-927d-eb24deac5062",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "BoostFreeze",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4ab40248-e15f-4cd2-8e4b-1f612e1844c9",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "BoostFreeze",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

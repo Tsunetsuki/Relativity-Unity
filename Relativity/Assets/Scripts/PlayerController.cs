@@ -7,7 +7,8 @@ public class PlayerController : MonoBehaviour
 {
     public PlayerInput playerInput;
     private Vector3 dir;
-    private float rapidity;
+    private bool boostFrozen = false;
+
     public void OnMovement(InputAction.CallbackContext value) {
         Vector2 newDir = value.ReadValue<Vector2>();
         dir = new Vector3(newDir.x, newDir.y, 0);
@@ -15,7 +16,21 @@ public class PlayerController : MonoBehaviour
     }
 
     public void OnBoostChange(InputAction.CallbackContext value) {
-        //Vector2 inputDir = value.ReadValue<Vector2>();
-        GetComponent<Observer>().BoostVel = 0.7f * Observer.LIGHT_SPEED * value.ReadValue<Vector2>();
+        if (!boostFrozen)
+        {
+            Vector2 inputVec = value.ReadValue<Vector2>();
+            if (inputVec.magnitude < 0.1)
+            {
+                inputVec = Vector2.zero;
+            }
+            GetComponent<Observer>().BoostVel =  0.9f * Observer.LIGHT_SPEED * inputVec;
+        }
+    }
+
+    public void OnBoostFreeze(InputAction.CallbackContext value) {
+        if (value.started)
+        {
+            boostFrozen = !boostFrozen;
+        }
     }
 }

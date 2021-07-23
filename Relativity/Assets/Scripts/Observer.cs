@@ -12,12 +12,15 @@ public class Observer : MonoBehaviour
     public LineRenderer xBasisVector;
     public LineRenderer yBasisVector;
 
+    public Vector3 equitemporalPlaneNormal;
     public Vector2 BoostVel{ get; set; }
 
     public static float LIGHT_SPEED = 1;
 
     private void Awake() {
         mat = Matrix4x4.identity;
+        mat_inverse = Matrix4x4.Inverse(mat);
+        equitemporalPlaneNormal = Vector3.up;
         BoostVel = Vector2.zero;
     }
 
@@ -29,6 +32,15 @@ public class Observer : MonoBehaviour
         tBasisVector.SetPosition(1, mat_inverse.MultiplyPoint3x4(new Vector3(0, 1, 0)));
         xBasisVector.SetPosition(1, mat_inverse.MultiplyPoint3x4(new Vector3(1, 0, 0)));
         yBasisVector.SetPosition(1, mat_inverse.MultiplyPoint3x4(new Vector3(0, 0, 1)));
+
+        equitemporalPlaneNormal = Vector3.Cross(mat_inverse.MultiplyPoint3x4(new Vector3(1, 0, 0)), mat_inverse.MultiplyPoint3x4(new Vector3(0, 0, 1))).normalized;
+        Debug.DrawLine(transform.position, equitemporalPlaneNormal);
+    }
+
+    int fixs = 0;
+    private void FixedUpdate() {
+        fixs++;
+        Debug.Log(fixs/Time.time);
     }
 
     private Matrix4x4 Boost(Vector2 twoVel) {

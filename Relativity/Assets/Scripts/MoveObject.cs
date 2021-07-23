@@ -5,8 +5,9 @@ using UnityEngine;
 public class MoveObject : MonoBehaviour
 {
     public Rigidbody rb;
+    public Vector3 velocity;
     void Start()
     {
-        rb.velocity = new Vector3(0, 1, 0);
+        rb.velocity = velocity;
     }
 }
