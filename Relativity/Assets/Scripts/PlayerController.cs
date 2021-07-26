@@ -8,29 +8,43 @@ public class PlayerController : MonoBehaviour
     public PlayerInput playerInput;
     private Vector3 dir;
     private bool boostFrozen = false;
-
+    private bool manualBoostEnabled = false;
+    private float controllerDeadzone = 0.1f;
+    public float maxBeta;
+    private Vector2 inputToSpatialVelocity(Vector2 inputVec) {
+        if (inputVec.magnitude < controllerDeadzone)
+        {
+            inputVec = Vector2.zero;
+        }
+        return maxBeta * Observer.LIGHT_SPEED * inputVec;
+    }
     public void OnMovement(InputAction.CallbackContext value) {
         Vector2 newDir = value.ReadValue<Vector2>();
-        dir = new Vector3(newDir.x, newDir.y, 0);
-        transform.position = dir;
+        //dir = new Vector3(newDir.x, 0, newDir.y);
+        //transform.position = dir;
+
+        if (!manualBoostEnabled)
+        {
+            GetComponent<Observer>().BoostVel = inputToSpatialVelocity(value.ReadValue<Vector2>());
+        }
     }
 
     public void OnBoostChange(InputAction.CallbackContext value) {
-        if (!boostFrozen)
+        if (!boostFrozen && manualBoostEnabled)
         {
-            Vector2 inputVec = value.ReadValue<Vector2>();
-            if (inputVec.magnitude < 0.1)
-            {
-                inputVec = Vector2.zero;
-            }
-            GetComponent<Observer>().BoostVel =  0.9f * Observer.LIGHT_SPEED * inputVec;
+            GetComponent<Observer>().BoostVel = inputToSpatialVelocity(value.ReadValue<Vector2>());
         }
     }
 
     public void OnBoostFreeze(InputAction.CallbackContext value) {
-        if (value.started)
-        {
-            boostFrozen = !boostFrozen;
-        }
+        if (value.started) boostFrozen = !boostFrozen;
+    }
+
+    public void OnManualBoostToggle(InputAction.CallbackContext value) {
+        if (value.started) manualBoostEnabled = !manualBoostEnabled;
+    }
+
+    public void OnReset(InputAction.CallbackContext value) {
+        if (value.started) transform.localPosition = Vector3.zero;
     }
 }

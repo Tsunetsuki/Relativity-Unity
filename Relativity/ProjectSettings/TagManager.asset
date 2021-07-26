@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Observer
   - ObservedFrame
+  - StationaryFrame
   layers:
   - Default
   - TransparentFX

@@ -5,12 +5,14 @@ using UnityEngine;
 
 public class Observer : MonoBehaviour
 {
+    private Rigidbody rb;
     public Matrix4x4 mat;
     public Matrix4x4 mat_inverse;
 
     public LineRenderer tBasisVector;
     public LineRenderer xBasisVector;
     public LineRenderer yBasisVector;
+    public Material lorentzMaterial;
 
     [HideInInspector]
     public Vector3 equitemporalPlaneNormal;
@@ -23,6 +25,7 @@ public class Observer : MonoBehaviour
         mat_inverse = Matrix4x4.Inverse(mat);
         equitemporalPlaneNormal = Vector3.up;
         BoostVel = Vector2.zero;
+        rb = GetComponent<Rigidbody>();
     }
 
     private void Update() {
@@ -36,7 +39,23 @@ public class Observer : MonoBehaviour
 
         equitemporalPlaneNormal = Vector3.Cross(mat_inverse.MultiplyPoint3x4(new Vector3(1, 0, 0)), mat_inverse.MultiplyPoint3x4(new Vector3(0, 0, 1))).normalized;
         Debug.DrawLine(transform.position, equitemporalPlaneNormal);
+        
     }
+
+    private void FixedUpdate() {
+        Vector3 stVelocity = mat_inverse.MultiplyPoint3x4(new Vector3(0, 1, 0));
+        rb.velocity = stVelocity;
+        SetShaderVariables();
+    }
+
+    private void SetShaderVariables() {
+        Vector3 observedFramePos = GameObject.FindGameObjectWithTag("ObservedFrame").transform.position;
+        lorentzMaterial.SetMatrix("_LorentzMatrix", mat);
+        lorentzMaterial.SetMatrix("_LorentzMatrixInverse", mat_inverse);
+        lorentzMaterial.SetVector("_ObserverPos", new Vector4(transform.position.x, transform.position.y, transform.position.z, 1));
+        lorentzMaterial.SetVector("_ObserverFramePos", new Vector4(observedFramePos.x, observedFramePos.y, observedFramePos.z, 1));
+    }
+
     private Matrix4x4 Boost(Vector2 twoVel) {
 
         float spatialSpeed = twoVel.magnitude; // spatialSpeed < light_speed

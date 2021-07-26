@@ -26,11 +26,6 @@ public class CameraController : MonoBehaviour
                 camera1.gameObject.SetActive(false);
                 camera2.gameObject.SetActive(true);
                 break;
-
         }
-    }
-
-    public void SetActiveCamera1() {
-
     }
 }
