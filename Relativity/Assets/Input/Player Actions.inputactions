@@ -22,7 +22,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "BoostFreeze",
+                    "name": "Pause",
                     "type": "Button",
                     "id": "89c0ce96-facc-4e5a-b8f5-dc6edd1aa2a8",
                     "expectedControlType": "Button",
@@ -210,18 +210,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "BoostFreeze",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "4ab40248-e15f-4cd2-8e4b-1f612e1844c9",
-                    "path": "<Keyboard>/f",
+                    "path": "<Keyboard>/enter",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "BoostFreeze",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

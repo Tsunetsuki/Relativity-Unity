@@ -52,8 +52,10 @@ public class Observer : MonoBehaviour
         Vector3 observedFramePos = GameObject.FindGameObjectWithTag("ObservedFrame").transform.position;
         lorentzMaterial.SetMatrix("_LorentzMatrix", mat);
         lorentzMaterial.SetMatrix("_LorentzMatrixInverse", mat_inverse);
-        lorentzMaterial.SetVector("_ObserverPos", new Vector4(transform.position.x, transform.position.y, transform.position.z, 1));
-        lorentzMaterial.SetVector("_ObserverFramePos", new Vector4(observedFramePos.x, observedFramePos.y, observedFramePos.z, 1));
+        lorentzMaterial.SetVector("_ObserverPos", transform.position);
+        lorentzMaterial.SetVector("_ObserverVel", equitemporalPlaneNormal);
+        lorentzMaterial.SetVector("_ObserverFramePos", observedFramePos);
+
     }
 
     private Matrix4x4 Boost(Vector2 twoVel) {

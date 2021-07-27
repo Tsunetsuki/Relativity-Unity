@@ -20,6 +20,8 @@ public class ObserveeObject : MonoBehaviour
         if (IsCopy)
         {
             startingPoint = original.transform.position;
+            lorentzMaterial = GetComponent<MeshRenderer>().material;
+            lorentzMaterial.SetVector("_IndivColor", Color.HSVToRGB(Random.Range(0f, 1f), 1, 1));
         }
         else
         {
@@ -39,7 +41,27 @@ public class ObserveeObject : MonoBehaviour
             Vector3 intersection = LinePlaneIntersect(startingPoint, stVelocity, observer.transform.position, observer.equitemporalPlaneNormal);
             Vector3 observerFramePos = GameObject.FindGameObjectWithTag("ObservedFrame").transform.position;
             transform.position = observerFramePos + observer.mat.MultiplyPoint3x4(intersection - observer.transform.position);
+
+            Matrix4x4 originalMatrix = original.transform.localToWorldMatrix;
+
+            transform.rotation = original.transform.rotation;
+            transform.localScale = new Vector3(originalMatrix.m00, originalMatrix.m11, originalMatrix.m22);
+            //Debug.Log(originalMatrix);
+
+            SetShaderVariables();
         }
+    }
+
+    private void SetShaderVariables() {
+        lorentzMaterial.SetVector("_OriginalPos", startingPoint);
+        lorentzMaterial.SetVector("_OriginalVel", stVelocity);
+
+        Vector3 observedFramePos = GameObject.FindGameObjectWithTag("ObservedFrame").transform.position;
+        lorentzMaterial.SetMatrix("_LorentzMatrix", observer.mat);
+        lorentzMaterial.SetMatrix("_LorentzMatrixInverse", observer.mat_inverse);
+        lorentzMaterial.SetVector("_ObserverPos", observer.transform.position);
+        lorentzMaterial.SetVector("_ObserverVel", observer.equitemporalPlaneNormal);
+        lorentzMaterial.SetVector("_ObserverFramePos", observedFramePos);
     }
 
     private void SpawnCopy() {

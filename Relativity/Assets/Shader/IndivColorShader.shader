@@ -1,4 +1,4 @@
-﻿Shader "Unlit/DeformVertex"
+﻿Shader "Unlit/IndivColorShader"
 {
     Properties
     {
@@ -24,7 +24,7 @@
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
             };
-            
+
             struct v2f
             {
                 float2 uv : TEXCOORD0;
@@ -34,43 +34,25 @@
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
-
-            float4x4 _LorentzMatrix;
-            float4x4 _LorentzMatrixInverse;
-            float4 _ObserverPos;
-            float4 _ObserverFramePos;
+            float4 _InputColor;
 
             v2f vert (appdata v)
             {
                 v2f o;
-                
-                //Lorentz Transformation: First undoes L-Tf on object (origin) position, then redoes it with the specific vertex
-                float4 worldPos = mul(unity_ObjectToWorld, v.vertex);
-                float4 objectPos = mul(unity_ObjectToWorld, float4(0, 0, 0, 1));
-                float4 relToObjectPos = worldPos - objectPos;
-
-                float4 untransformedObjectPos = mul(_LorentzMatrixInverse, objectPos - _ObserverFramePos);
-                float4 transformedPos = _ObserverFramePos + mul(_LorentzMatrix, untransformedObjectPos + relToObjectPos);
-
-                o.vertex = UnityWorldToClipPos(transformedPos);
+                o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
-            float getRed() {
-                return _SinTime;
-            }
+
             fixed4 frag(v2f i) : SV_Target
             {
                 // sample the texture
-                fixed4 col = float4(getRed(), 1, 0.5, 1);//tex2D(_MainTex, i.uv);
+                fixed4 col = _InputColor;//tex2D(_MainTex, i.uv);
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;
             }
-
-            
-
             ENDCG
         }
     }
