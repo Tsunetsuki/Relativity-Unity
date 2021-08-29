@@ -7,31 +7,33 @@ public class PlayerController : MonoBehaviour
 {
     public PlayerInput playerInput;
     private Vector3 dir;
-    private bool boostFrozen = false;
     private bool manualBoostEnabled = false;
-    //private float controllerDeadzone = 0.1f;
+
     public float maxBeta;
+    public float maxAcc;
     private bool paused = false;
+    private Vector2 spatial_acc;
     private Vector2 inputToSpatialVelocity(Vector2 inputVec) {
-        /*if (inputVec.magnitude < controllerDeadzone)
-        {
-            inputVec = Vector2.zero;
-        }*/
         return maxBeta * Observer.LIGHT_SPEED * inputVec;
     }
-    public void OnMovement(InputAction.CallbackContext value) {
-        Vector2 newDir = value.ReadValue<Vector2>();
-        //dir = new Vector3(newDir.x, 0, newDir.y);
-        //transform.position = dir;
 
+    public void OnMovement(InputAction.CallbackContext value) {
+        if (!paused)
+        {
+            Vector2 inputVec = value.ReadValue<Vector2>();
+            spatial_acc = maxAcc * Observer.LIGHT_SPEED * inputVec;
+        }
+    }
+
+    private void FixedUpdate() {
         if (!manualBoostEnabled)
         {
-            GetComponent<Observer>().BoostVel = inputToSpatialVelocity(value.ReadValue<Vector2>());
+            GetComponent<Observer>().Accelerate(spatial_acc);
         }
     }
 
     public void OnBoostChange(InputAction.CallbackContext value) {
-        if (!boostFrozen && manualBoostEnabled)
+        if (manualBoostEnabled && !paused)
         {
             GetComponent<Observer>().BoostVel = inputToSpatialVelocity(value.ReadValue<Vector2>());
         }
@@ -42,7 +44,11 @@ public class PlayerController : MonoBehaviour
     }
 
     public void OnReset(InputAction.CallbackContext value) {
-        if (value.started) transform.localPosition = Vector3.zero;
+        if (value.started)
+        {
+            transform.localPosition = Vector3.zero;
+            GetComponent<Observer>().mat = Matrix4x4.identity;
+        }
     }
 
     public void OnPause(InputAction.CallbackContext value) {
