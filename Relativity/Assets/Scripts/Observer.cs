@@ -17,6 +17,7 @@ public class Observer : MonoBehaviour
     [HideInInspector]
     public Vector3 equitemporalPlaneNormal;
     public Vector2 BoostVel{ get; set; }
+    private Vector2 spatial_acc = Vector2.zero;
 
     public static float LIGHT_SPEED = 1;
 
@@ -30,7 +31,7 @@ public class Observer : MonoBehaviour
 
     private void Update() {
         //rapidity = 1 * Mathf.Sin(Time.time);
-        mat = Boost(BoostVel);
+        mat = Boost(spatial_acc) * mat;//Boost(BoostVel);
         mat_inverse = Matrix4x4.Inverse(mat);
 
         tBasisVector.SetPosition(1, mat_inverse.MultiplyPoint3x4(new Vector3(0, 1, 0)));
@@ -46,6 +47,12 @@ public class Observer : MonoBehaviour
         Vector3 stVelocity = mat_inverse.MultiplyPoint3x4(new Vector3(0, 1, 0));
         rb.velocity = stVelocity;
         SetShaderVariables();
+    }
+
+    public void Accelerate(Vector2 spatial_acc) {
+        this.spatial_acc = spatial_acc;
+        //Vector3 newVel = Boost(spatial_acc).inverse.MultiplyPoint3x4(Vector3.up);
+        //st_acc = mat.MultiplyPoint3x4(newVel);//in stationary frame
     }
 
     private void SetShaderVariables() {
@@ -80,6 +87,12 @@ public class Observer : MonoBehaviour
             return boostMat;
         }
     }
+
+    /*private void OnDrawGizmos() {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, transform.position + st_acc);
+        Gizmos.color = Color.white;
+    }*/
 
     private float sqr(float f) {
         return Mathf.Pow(f, 2);
