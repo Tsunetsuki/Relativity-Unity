@@ -44,7 +44,7 @@ public class ObserveeObject : MonoBehaviour
 
             Matrix4x4 originalMatrix = original.transform.localToWorldMatrix;
 
-            transform.rotation = original.transform.rotation;
+            //transform.rotation = original.transform.rotation;
             transform.localScale = new Vector3(originalMatrix.m00, originalMatrix.m11, originalMatrix.m22);
             //Debug.Log(originalMatrix);
 
