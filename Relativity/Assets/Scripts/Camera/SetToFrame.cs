@@ -5,8 +5,8 @@ using UnityEngine;
 public class SetToFrame : MonoBehaviour
 {
     public Transform frame;
-    void Start()
-    {
-        transform.position = frame.position + new Vector3(0, 100, 0);
+    public Vector3 offset;
+    private void FixedUpdate() {
+        transform.position = frame.position + offset;
     }
 }

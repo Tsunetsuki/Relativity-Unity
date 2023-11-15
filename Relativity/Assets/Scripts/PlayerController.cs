@@ -28,6 +28,8 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate() {
         if (!manualBoostEnabled)
         {
+            float up = Mathf.Sin(Time.time);
+            float right = Mathf.Cos(Time.time);
             GetComponent<Observer>().Accelerate(spatial_acc);
         }
     }
