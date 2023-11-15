@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VectorMat
+  m_Name: VectorMat2
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: _ALPHABLEND_ON _EMISSION
   m_LightmapFlags: 2
@@ -75,4 +75,4 @@ Material:
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 0.01886791, g: 0.01886791, b: 0.01886791, a: 0.21960784}
-    - _EmissionColor: {r: 5.98629, g: 2.0638301, b: 0.31060943, a: 1}
+    - _EmissionColor: {r: 5.9862895, g: 0.3134182, b: 4.080476, a: 1}

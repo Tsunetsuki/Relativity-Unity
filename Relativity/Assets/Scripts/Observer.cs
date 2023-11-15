@@ -30,9 +30,8 @@ public class Observer : MonoBehaviour
     }
 
     private void Update() {
-        //rapidity = 1 * Mathf.Sin(Time.time);
-        mat = Boost(spatial_acc) * mat;//Boost(BoostVel);
-        mat_inverse = Matrix4x4.Inverse(mat);
+        //mat = Boost(spatial_acc) * mat;//Boost(BoostVel);
+        //mat_inverse = Matrix4x4.Inverse(mat);
 
         tBasisVector.SetPosition(1, mat_inverse.MultiplyPoint3x4(new Vector3(0, 1, 0)));
         xBasisVector.SetPosition(1, mat_inverse.MultiplyPoint3x4(new Vector3(1, 0, 0)));
@@ -44,6 +43,9 @@ public class Observer : MonoBehaviour
     }
 
     private void FixedUpdate() {
+        mat = Boost(spatial_acc) * mat;//Boost(BoostVel);
+        mat_inverse = Matrix4x4.Inverse(mat);
+
         Vector3 stVelocity = mat_inverse.MultiplyPoint3x4(new Vector3(0, 1, 0));
         rb.velocity = stVelocity;
         SetShaderVariables();
