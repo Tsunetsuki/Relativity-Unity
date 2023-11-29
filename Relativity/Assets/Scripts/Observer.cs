@@ -21,12 +21,16 @@ public class Observer : MonoBehaviour
 
     public static float LIGHT_SPEED = 1;
 
+    public AudioSource audioSource = null;
+
     private void Awake() {
         mat = Matrix4x4.identity;
         mat_inverse = Matrix4x4.Inverse(mat);
         equitemporalPlaneNormal = Vector3.up;
         BoostVel = Vector2.zero;
         rb = GetComponent<Rigidbody>();
+
+        audioSource = GameObject.FindGameObjectWithTag("Radio")?.GetComponent<AudioSource>();
     }
 
     private void Update() {
@@ -49,6 +53,9 @@ public class Observer : MonoBehaviour
         Vector3 stVelocity = mat_inverse.MultiplyPoint3x4(new Vector3(0, 1, 0));
         rb.velocity = stVelocity;
         SetShaderVariables();
+
+        if (audioSource)
+            audioSource.pitch = 1 + (stVelocity.y - 1) / 5;
     }
 
     public void Accelerate(Vector2 spatial_acc) {

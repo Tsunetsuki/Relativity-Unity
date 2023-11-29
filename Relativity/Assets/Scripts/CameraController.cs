@@ -8,6 +8,11 @@ public class CameraController : MonoBehaviour
     public Camera camera1;
     public Camera camera2;
 
+    
+    public void Start() {
+        SetActiveCamera(0);
+    }
+
     public void SetActiveCamera(int camera) {
         switch (camera)
         {

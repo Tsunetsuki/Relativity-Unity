@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObserveeObject : MonoBehaviour
+public class ObserveeObjectConstVel : MonoBehaviour
 {
     private Observer observer;
     public bool IsCopy { get; set; } = false;
@@ -66,7 +66,7 @@ public class ObserveeObject : MonoBehaviour
 
     private void SpawnCopy() {
         Transform observedFrame = GameObject.FindGameObjectWithTag("ObservedFrame").transform;
-        ObserveeObject copy = Instantiate(this, observedFrame.position + transform.position, transform.rotation, observedFrame);
+        ObserveeObjectConstVel copy = Instantiate(this, observedFrame.position + transform.position, transform.rotation, observedFrame);
         copy.IsCopy = true;
         copy.original = gameObject;
         copy.GetComponent<MeshRenderer>().material = lorentzMaterial;
