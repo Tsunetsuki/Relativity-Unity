@@ -18,11 +18,11 @@ public class Observee : MonoBehaviour
     }
 
     private void Update() {
-        if (IsCopy)
-        {
-            Vector3 observerFramePos = GameObject.FindGameObjectWithTag("ObservedFrame").transform.position;
-            transform.position = observerFramePos + observer.mat.MultiplyPoint3x4(original.transform.position - observer.transform.position);
-        }
+        //if (IsCopy)
+        //{
+        //    Vector3 observerFramePos = GameObject.FindGameObjectWithTag("ObservedFrame").transform.position;
+        //    transform.position = observerFramePos + observer.mat.MultiplyPoint3x4(original.transform.position - observer.transform.position);
+        //}
     }
 
     private void SpawnCopy() {
