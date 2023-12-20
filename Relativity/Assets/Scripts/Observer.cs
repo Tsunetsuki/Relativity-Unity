@@ -16,7 +16,8 @@ public class Observer : MonoBehaviour
 
     [HideInInspector]
     public Vector3 equitemporalPlaneNormal;
-    public Vector2 BoostVel{ get; set; }
+    public Vector2 BoostVel { get; set; }
+    public bool BoostIsSetManually { get; set; }
     private Vector2 spatial_acc = Vector2.zero;
 
     public static float LIGHT_SPEED = 1;
@@ -34,9 +35,6 @@ public class Observer : MonoBehaviour
     }
 
     private void Update() {
-        //mat = Boost(spatial_acc) * mat;//Boost(BoostVel);
-        //mat_inverse = Matrix4x4.Inverse(mat);
-
         tBasisVector.SetPosition(1, mat_inverse.MultiplyPoint3x4(new Vector3(0, 1, 0)));
         xBasisVector.SetPosition(1, mat_inverse.MultiplyPoint3x4(new Vector3(1, 0, 0)));
         yBasisVector.SetPosition(1, mat_inverse.MultiplyPoint3x4(new Vector3(0, 0, 1)));
@@ -47,15 +45,17 @@ public class Observer : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        mat = Boost(spatial_acc) * mat;//Boost(BoostVel);
+        mat = BoostIsSetManually ? Boost(BoostVel) : Boost(spatial_acc) * mat;
         mat_inverse = Matrix4x4.Inverse(mat);
 
         Vector3 stVelocity = mat_inverse.MultiplyPoint3x4(new Vector3(0, 1, 0));
-        rb.velocity = stVelocity;
-        SetShaderVariables();
+        
+        if (!BoostIsSetManually)
+            rb.velocity = stVelocity;
 
         if (audioSource)
-            audioSource.pitch = 1 + (stVelocity.y - 1) / 5;
+            audioSource.pitch = 1 + Mathf.Log10(stVelocity.y);
+        SetShaderVariables();
     }
 
     public void Accelerate(Vector2 spatial_acc) {
