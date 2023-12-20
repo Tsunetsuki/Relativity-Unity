@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public PlayerInput playerInput;
-    private Vector3 dir;
     private bool manualBoostEnabled = false;
 
     public float maxBeta;
@@ -41,6 +40,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnManualBoostToggle(InputAction.CallbackContext value) {
         if (value.started) manualBoostEnabled = !manualBoostEnabled;
+        GetComponent<Observer>().BoostIsSetManually = manualBoostEnabled;
     }
 
     public void OnReset(InputAction.CallbackContext value) {
