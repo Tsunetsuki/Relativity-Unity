@@ -21,6 +21,9 @@ public class ObserveeObjectConstVel : MonoBehaviour
         {
             startingPoint = original.transform.position;
             lorentzMaterial = GetComponent<MeshRenderer>().material;
+
+            var origMat = original.GetComponent<MeshRenderer>().material;
+            lorentzMaterial.mainTexture = origMat.mainTexture;
             lorentzMaterial.SetVector("_IndivColor", Color.HSVToRGB(Random.Range(0f, 1f), 1, 1));
         }
         else

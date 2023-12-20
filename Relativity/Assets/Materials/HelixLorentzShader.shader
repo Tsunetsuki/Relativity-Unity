@@ -1,4 +1,4 @@
-﻿Shader "Unlit/VertexProjectTransform"
+﻿Shader "Unlit/HelixLorentz"
 {
     Properties
     {
