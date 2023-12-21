@@ -33,7 +33,7 @@ public class ObserveeObjectConstVel : MonoBehaviour
         }
     }
 
-    private void FixedUpdate() {
+    private void Update() {
         if (!IsCopy)
         {
             Debug.DrawRay(transform.position, stVelocity);
