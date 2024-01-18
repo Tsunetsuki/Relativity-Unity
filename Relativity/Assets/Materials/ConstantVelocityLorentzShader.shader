@@ -41,7 +41,7 @@
             float4x4 _LorentzMatrixInverse;
             float4 _ObserverPos;//unncessary, can use _ObserverFrame instead?
             float4 _ObserverVel;
-            float4 _ObserverFramePos;
+            float4 _ObservedFramePos;
 
             //Set by observees individually
             float4 _OriginalPos; //unnecessary?
@@ -70,8 +70,8 @@
 
                 //Lorentz Transformation: First undoes L-Tf on object (origin) position, then redoes it with the specific vertex
                 float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-                float3 objectPos = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xyz;
-                float3 relToObjectPos = worldPos - objectPos;
+                float3 objectPos = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xyz; // object center
+                float3 relToObjectPos = worldPos - objectPos; // vertex rel to center
 
                 float3 untransformedObjectPos = mul(_LorentzMatrixInverse, objectPos - _ObserverFramePos);
                 float3 untransformedVertexPos = untransformedObjectPos +  relToObjectPos;
