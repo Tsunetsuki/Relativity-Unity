@@ -73,14 +73,15 @@
                 float3 objectPos = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xyz; // object center
                 float3 relToObjectPos = worldPos - objectPos; // vertex rel to center
 
-                float3 untransformedObjectPos = mul(_LorentzMatrixInverse, objectPos - _ObserverFramePos);
-                float3 untransformedVertexPos = untransformedObjectPos +  relToObjectPos;
-                //float3 untransformedVertexPos = _OriginalPos.xyz + relToObjectPos;
+                float3 untransformedVertexPos = _OriginalPos.xyz + relToObjectPos;
                 float3 projectedVertexPos = LinePlaneIntersect(untransformedVertexPos, _OriginalVel, _ObserverPos, _ObserverVel);
+                float3 transformedProjectedVertexPos = mul(_LorentzMatrix, projectedVertexPos - _ObserverPos);
 
-                float3 transformedPos = mul(_LorentzMatrix, projectedVertexPos - _ObserverPos) + _ObserverFramePos;
+                float3 transformedPos = _ObservedFramePos + transformedProjectedVertexPos;
 
-                o.vertex = UnityWorldToClipPos(transformedPos);
+                float3 finalPos = transformedPos;
+
+                o.vertex = UnityWorldToClipPos(finalPos);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 UNITY_TRANSFER_FOG(o, o.vertex);
                 return o;
