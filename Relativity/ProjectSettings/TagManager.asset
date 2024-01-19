@@ -8,6 +8,7 @@ TagManager:
   - ObservedFrame
   - StationaryFrame
   - Radio
+  - TimeDisplay
   layers:
   - Default
   - TransparentFX

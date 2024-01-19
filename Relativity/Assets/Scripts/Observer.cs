@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 
@@ -22,7 +24,8 @@ public class Observer : MonoBehaviour
 
     public static float LIGHT_SPEED = 1;
 
-    public AudioSource audioSource = null;
+    private AudioSource audioSource = null;
+    private TextMeshProUGUI timeDisplay = null;
 
     private void Awake() {
         mat = Matrix4x4.identity;
@@ -32,6 +35,7 @@ public class Observer : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         audioSource = GameObject.FindGameObjectWithTag("Radio")?.GetComponent<AudioSource>();
+        timeDisplay = GameObject.FindGameObjectWithTag("TimeDisplay").GetComponent<TextMeshProUGUI>();
     }
 
     private void Update() {
@@ -42,6 +46,12 @@ public class Observer : MonoBehaviour
         equitemporalPlaneNormal = - Vector3.Cross(mat_inverse.MultiplyPoint3x4(new Vector3(1, 0, 0)), mat_inverse.MultiplyPoint3x4(new Vector3(0, 0, 1))).normalized;
         
         Debug.DrawLine(transform.position, equitemporalPlaneNormal);
+
+
+        int currentTimeInSeconds = (int) transform.position.y;
+        TimeSpan elapsedTime = TimeSpan.FromSeconds(currentTimeInSeconds);
+        string nowAsText = elapsedTime.ToString();
+        timeDisplay.SetText(nowAsText);
     }
 
     private void FixedUpdate() {
