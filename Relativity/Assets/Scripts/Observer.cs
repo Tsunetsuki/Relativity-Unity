@@ -39,9 +39,9 @@ public class Observer : MonoBehaviour
         xBasisVector.SetPosition(1, mat_inverse.MultiplyPoint3x4(new Vector3(1, 0, 0)));
         yBasisVector.SetPosition(1, mat_inverse.MultiplyPoint3x4(new Vector3(0, 0, 1)));
 
-        equitemporalPlaneNormal = Vector3.Cross(mat_inverse.MultiplyPoint3x4(new Vector3(1, 0, 0)), mat_inverse.MultiplyPoint3x4(new Vector3(0, 0, 1))).normalized;
-        Debug.DrawLine(transform.position, equitemporalPlaneNormal);
+        equitemporalPlaneNormal = - Vector3.Cross(mat_inverse.MultiplyPoint3x4(new Vector3(1, 0, 0)), mat_inverse.MultiplyPoint3x4(new Vector3(0, 0, 1))).normalized;
         
+        Debug.DrawLine(transform.position, equitemporalPlaneNormal);
     }
 
     private void FixedUpdate() {

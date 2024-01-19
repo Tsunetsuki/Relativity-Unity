@@ -1,4 +1,4 @@
-﻿Shader "Unlit/VertexProjectTransform"
+﻿Shader "Unlit/ConstantVelocityLorentz"
 {
     Properties
     {
@@ -8,6 +8,7 @@
     {
         Tags { "RenderType"="Opaque" }
         LOD 100
+        Blend SrcAlpha OneMinusSrcAlpha
 
         Pass
         {
@@ -40,7 +41,7 @@
             float4x4 _LorentzMatrixInverse;
             float4 _ObserverPos;//unncessary, can use _ObserverFrame instead?
             float4 _ObserverVel;
-            float4 _ObserverFramePos;
+            float4 _ObservedFramePos;
 
             //Set by observees individually
             float4 _OriginalPos; //unnecessary?
@@ -69,17 +70,18 @@
 
                 //Lorentz Transformation: First undoes L-Tf on object (origin) position, then redoes it with the specific vertex
                 float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-                float3 objectPos = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xyz;
-                float3 relToObjectPos = worldPos - objectPos;
+                float3 objectPos = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xyz; // object center
+                float3 relToObjectPos = worldPos - objectPos; // vertex rel to center
 
-                float3 untransformedObjectPos = mul(_LorentzMatrixInverse, objectPos - _ObserverFramePos);
-                float3 untransformedVertexPos = untransformedObjectPos +  relToObjectPos;
-                //float3 untransformedVertexPos = _OriginalPos.xyz + relToObjectPos;
+                float3 untransformedVertexPos = _OriginalPos.xyz + relToObjectPos;
                 float3 projectedVertexPos = LinePlaneIntersect(untransformedVertexPos, _OriginalVel, _ObserverPos, _ObserverVel);
+                float3 transformedProjectedVertexPos = mul(_LorentzMatrix, projectedVertexPos - _ObserverPos);
 
-                float3 transformedPos = mul(_LorentzMatrix, projectedVertexPos - _ObserverPos) + _ObserverFramePos;
+                float3 transformedPos = _ObservedFramePos + transformedProjectedVertexPos;
 
-                o.vertex = UnityWorldToClipPos(transformedPos);
+                float3 finalPos = transformedPos;
+
+                o.vertex = UnityWorldToClipPos(finalPos);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 UNITY_TRANSFER_FOG(o, o.vertex);
                 return o;

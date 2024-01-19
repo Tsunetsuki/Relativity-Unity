@@ -21,6 +21,9 @@ public class ObserveeObjectConstVel : MonoBehaviour
         {
             startingPoint = original.transform.position;
             lorentzMaterial = GetComponent<MeshRenderer>().material;
+
+            var origMat = original.GetComponent<MeshRenderer>().material;
+            lorentzMaterial.mainTexture = origMat.mainTexture;
             lorentzMaterial.SetVector("_IndivColor", Color.HSVToRGB(Random.Range(0f, 1f), 1, 1));
         }
         else
@@ -30,7 +33,7 @@ public class ObserveeObjectConstVel : MonoBehaviour
         }
     }
 
-    private void FixedUpdate() {
+    private void Update() {
         if (!IsCopy)
         {
             Debug.DrawRay(transform.position, stVelocity);
@@ -39,8 +42,8 @@ public class ObserveeObjectConstVel : MonoBehaviour
         else
         {
             Vector3 intersection = LinePlaneIntersect(startingPoint, stVelocity, observer.transform.position, observer.equitemporalPlaneNormal);
-            Vector3 observerFramePos = GameObject.FindGameObjectWithTag("ObservedFrame").transform.position;
-            transform.position = observerFramePos + observer.mat.MultiplyPoint3x4(intersection - observer.transform.position);
+            Vector3 observedFramePos = GameObject.FindGameObjectWithTag("ObservedFrame").transform.position;
+            transform.position = observedFramePos + observer.mat.MultiplyPoint3x4(intersection - observer.transform.position);
 
             Matrix4x4 originalMatrix = original.transform.localToWorldMatrix;
 
@@ -61,7 +64,7 @@ public class ObserveeObjectConstVel : MonoBehaviour
         lorentzMaterial.SetMatrix("_LorentzMatrixInverse", observer.mat_inverse);
         lorentzMaterial.SetVector("_ObserverPos", observer.transform.position);
         lorentzMaterial.SetVector("_ObserverVel", observer.equitemporalPlaneNormal);
-        lorentzMaterial.SetVector("_ObserverFramePos", observedFramePos);
+        lorentzMaterial.SetVector("_ObservedFramePos", observedFramePos);
     }
 
     private void SpawnCopy() {
